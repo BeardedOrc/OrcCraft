@@ -1,0 +1,11 @@
+name: OrcCraft
+version: ${project.version}
+main: me.beardedorc.orccraft.OrcCraft
+authors: [Defyled]
+description: OrcCraft Plugin
+api-version: 1.13
+
+commands:
+  orccraft:
+    usage: /orccraft <subcommand>
+    description: The main OrcCraft command.

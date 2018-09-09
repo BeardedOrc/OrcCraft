@@ -41,7 +41,7 @@ public class ConfigManager {
     public  FileConfiguration getCustomItemsCFG() {
         return customItemsCFG;
     }
-    
+
     public void saveCustomItems() {
 
         try {
@@ -53,5 +53,10 @@ public class ConfigManager {
 
     public void reloadCustomItems() {
         customItemsCFG = YamlConfiguration.loadConfiguration(customItems);
+    }
+
+    public void loadDefaultConfig() {
+        plugin.getConfig().options().copyDefaults(true);
+        plugin.saveConfig();
     }
 }

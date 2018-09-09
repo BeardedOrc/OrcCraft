@@ -1,6 +1,7 @@
 package me.beardedorc.orccraft;
 
 import me.beardedorc.orccraft.commands.utilities.CommandManager;
+import me.beardedorc.orccraft.utilities.ConfigManager;
 import me.beardedorc.orccraft.utilities.MysqlManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,24 +9,16 @@ public final class OrcCraft extends JavaPlugin {
 
     private  static  OrcCraft instance;
     public CommandManager commandManager;
-    public MysqlManager mysqlManager;
+    private MysqlManager mysqlManager;
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         setInstance(this);
-        loadConfig();
-        commandManager = new CommandManager();
-        commandManager.setup();
-        mysqlManager = new MysqlManager();
-        mysqlManager.mysqlSetup();
+        loadManagers();
 
 
-    }
-
-    public void loadConfig() {
-        getConfig().options().copyDefaults(true);
-        saveConfig();
     }
 
     public static OrcCraft getInstance() {
@@ -34,6 +27,23 @@ public final class OrcCraft extends JavaPlugin {
 
     private  static void setInstance(OrcCraft instance) {
         OrcCraft.instance = instance;
+    }
+
+
+    private void loadManagers() {
+        loadConfigManager();
+        commandManager = new CommandManager();
+        commandManager.setup();
+        mysqlManager = new MysqlManager();
+        mysqlManager.mysqlSetup();        
+    }
+
+    private  void loadConfigManager() {
+        configManager = new ConfigManager();
+        configManager.setup();
+        configManager.loadDefaultConfig();
+        configManager.saveCustomItems();
+        configManager.reloadCustomItems();
     }
 
     @Override

@@ -1,8 +1,30 @@
 enabled: true
 
 mysql:
-  host: 'localhost'
+  host: 192.168.1.100
   port: 3306
   database: 'database'
   username: 'username'
   password: 'password'
+
+ore_protection:
+  enabled: true
+  worlds: world
+  protected_ore_blocks:
+    DIAMOND_ORE:
+      always_drops:
+        enabled: true
+        drops:
+        - IRON_ORE,1
+        - DIRT,1
+      random_drops:
+        enabled: true
+        drops:
+        - GLOWSTONE,1
+        - IRON_AXE,1
+        - DIAMOND_LEGGINGS,1
+      rare_drops:
+        enabled: true
+        drops:
+        - DIAMOND_ORE,1,1
+        - DIAMOND,1,1

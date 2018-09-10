@@ -1,6 +1,7 @@
 package me.beardedorc.orccraft;
 
 import me.beardedorc.orccraft.commands.utilities.CommandManager;
+import me.beardedorc.orccraft.events.OreBreakEvent;
 import me.beardedorc.orccraft.utilities.ConfigManager;
 import me.beardedorc.orccraft.utilities.MysqlManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,13 +11,13 @@ public final class OrcCraft extends JavaPlugin {
     private  static  OrcCraft instance;
     public CommandManager commandManager;
     private MysqlManager mysqlManager;
-    private ConfigManager configManager;
+    public ConfigManager configManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         setInstance(this);
-        loadManagers();
+        loadManagers();loadEventsManager();
 
 
     }
@@ -35,7 +36,7 @@ public final class OrcCraft extends JavaPlugin {
         commandManager = new CommandManager();
         commandManager.setup();
         mysqlManager = new MysqlManager();
-        mysqlManager.mysqlSetup();        
+        mysqlManager.mysqlSetup();
     }
 
     private  void loadConfigManager() {
@@ -44,6 +45,10 @@ public final class OrcCraft extends JavaPlugin {
         configManager.loadDefaultConfig();
         configManager.saveCustomItems();
         configManager.reloadCustomItems();
+    }
+
+    private void loadEventsManager() {
+        getServer().getPluginManager().registerEvents(new OreBreakEvent(), this);
     }
 
     @Override

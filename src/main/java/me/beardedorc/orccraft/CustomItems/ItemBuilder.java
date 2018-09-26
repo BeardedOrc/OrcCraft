@@ -31,12 +31,12 @@ public class ItemBuilder {
         ItemMeta meta = item.getItemMeta();
 
         // set display name
-        String DisplayName = itemDisplayName[0];
-        ChatColor DisplayNameColor = ChatColor.valueOf(itemDisplayName[1]);
+        ChatColor DisplayNameColor = ChatColor.valueOf(itemDisplayName[0].toUpperCase());
+        String DisplayName = itemDisplayName[1];
         meta.setDisplayName(DisplayNameColor + DisplayName);
 
         // set lore
-        if (!(this.plugin.configManager.getCustomItemsCFG().getStringList("name." + name + "lore")).isEmpty()) {
+/*        if (!(this.plugin.configManager.getCustomItemsCFG().getStringList("name." + name + "lore")).isEmpty()) {
             ArrayList<String> lore = new ArrayList<String>();
             for (String l : this.plugin.configManager.getCustomItemsCFG().getStringList("name." + name + "lore")) {
                 String loreArray[] = l.split(",");
@@ -75,7 +75,7 @@ public class ItemBuilder {
                 boolean level_restriction = Boolean.valueOf(array[2]);
                 meta.addEnchant(enchantment, level, level_restriction);
             }
-        }
+        } */
 
         return item;
     }

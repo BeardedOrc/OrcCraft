@@ -1,6 +1,8 @@
 package me.beardedorc.orccraft.commands.utilities;
 
 import me.beardedorc.orccraft.OrcCraft;
+import me.beardedorc.orccraft.commands.CreateItemCommand;
+import me.beardedorc.orccraft.commands.GiveCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,11 +24,15 @@ public class CommandManager implements CommandExecutor {
     //Sub Commands
     public String main = "orccraft";
     public String info = "info";
+    public String give = "give";
+    public String createitem = "create";
 
     public void setup() {
         plugin.getCommand(main).setExecutor(this);
 
       //  this.commands.add(new GrabberCommand());
+        this.commands.add(new GiveCommand());
+        this.commands.add(new CreateItemCommand());
     }
 
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {

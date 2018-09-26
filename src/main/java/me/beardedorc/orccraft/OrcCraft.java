@@ -3,6 +3,8 @@ package me.beardedorc.orccraft;
 import me.beardedorc.orccraft.commands.utilities.CommandManager;
 import me.beardedorc.orccraft.events.OreBreakEvent;
 import me.beardedorc.orccraft.utilities.ConfigManager;
+import me.beardedorc.orccraft.utilities.ItemManager;
+import me.beardedorc.orccraft.utilities.MessageManager;
 import me.beardedorc.orccraft.utilities.MysqlManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,6 +14,8 @@ public final class OrcCraft extends JavaPlugin {
     public CommandManager commandManager;
     private MysqlManager mysqlManager;
     public ConfigManager configManager;
+    public ItemManager itemManager;
+    public MessageManager messageManager;
 
     @Override
     public void onEnable() {
@@ -37,14 +41,16 @@ public final class OrcCraft extends JavaPlugin {
         commandManager.setup();
         mysqlManager = new MysqlManager();
         mysqlManager.mysqlSetup();
+        itemManager = new ItemManager();
+
     }
 
     private  void loadConfigManager() {
         configManager = new ConfigManager();
         configManager.setup();
         configManager.loadDefaultConfig();
-        configManager.saveCustomItems();
-        configManager.reloadCustomItems();
+    //    configManager.saveCustomItems();
+    //    configManager.reloadCustomItems();
     }
 
     private void loadEventsManager() {

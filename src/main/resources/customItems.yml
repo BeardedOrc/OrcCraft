@@ -1,0 +1,12 @@
+#name: localname
+#  display_name: color,displayname
+#  material: STONE
+#  lore:
+#  - color,lore line 1
+#  enchants:
+#  - enchantname,enchant level, ignore restrictions true/false
+#  unbreakable: false
+#  hide_attributes: true
+#  hide_enchants: true
+#  hide_effects: true
+

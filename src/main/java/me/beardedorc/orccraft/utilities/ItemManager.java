@@ -3,6 +3,7 @@ package me.beardedorc.orccraft.utilities;
 import me.beardedorc.orccraft.OrcCraft;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,8 +35,11 @@ public class ItemManager {
         }
     }
 
-    public void dropItem(Player player, Location location, String name, int quantity){
-
+    public void dropItem(Block block, String name, int quantity){
+        if (checkItemExistsMap(name)) {
+            ItemStack item = itemStackBuilder(name, quantity);
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
+        }
     }
 
     private Map<String, ItemStack> loadItemData() {

@@ -1,8 +1,6 @@
-package me.beardedorc.orccraft.commands.utilities;
+package me.beardedorc.orccraft.commands;
 
 import me.beardedorc.orccraft.OrcCraft;
-import me.beardedorc.orccraft.commands.CreateItemCommand;
-import me.beardedorc.orccraft.commands.GiveCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

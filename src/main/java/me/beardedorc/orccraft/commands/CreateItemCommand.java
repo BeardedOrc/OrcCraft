@@ -1,7 +1,6 @@
 package me.beardedorc.orccraft.commands;
 
 import me.beardedorc.orccraft.OrcCraft;
-import me.beardedorc.orccraft.commands.utilities.SubCommand;
 import me.beardedorc.orccraft.utilities.ItemManager;
 import me.beardedorc.orccraft.utilities.MessageManager;
 import org.bukkit.entity.Player;
@@ -9,8 +8,9 @@ import org.bukkit.entity.Player;
 public class CreateItemCommand extends SubCommand {
 
     private OrcCraft plugin = OrcCraft.getInstance();
-    ItemManager itemManager;
-    MessageManager messageManager;
+
+    ItemManager itemManager = new ItemManager();
+    MessageManager messageManager = new MessageManager();
 
     @Override
     public void onCommand(Player player, String[] args) {
@@ -21,7 +21,7 @@ public class CreateItemCommand extends SubCommand {
         }
 
         String localName = args[1];
-        itemManager.createItem(player, localName);
+        itemManager.createNewItem(player, localName);
     }
 
     @Override

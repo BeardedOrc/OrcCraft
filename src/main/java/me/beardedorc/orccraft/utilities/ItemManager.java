@@ -1,110 +1,69 @@
 package me.beardedorc.orccraft.utilities;
 
 import me.beardedorc.orccraft.OrcCraft;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ItemManager {
 
     private OrcCraft plugin = OrcCraft.getInstance();
-    private Map<String, ItemStack> customItemData = new HashMap<>();
-    private ConfigManager configManager;
-    private MessageManager messageManager;
 
-    public void createItem(Player player, String name) {
-        if (!(checkItemExistsMap(name) || checkItemExistsFile(name))) {
-            ItemStack item = new ItemStack(player.getInventory().getItemInMainHand());
-            saveItemDataToMap(name, item);
-            saveItemDataToFile(name, item);
-            messageManager.playerGoodMessage(player,name + " saved.");
+    public void createNewItem (Player player, String name) {
+        if (!checkItemExists(name)) {
+            addItemToMap(player, name);
+            saveItemDataToFile(player, name);
+        } else {
+            plugin.messageManager.playerWarnMessage(player, "An item already exists with this name.");
+            plugin.messageManager.playerWarnMessage(player, "Please rename your item, or remove the old item.");
+        }
+    }
+
+    public void removeItem(Player player, String name) {
+        if (!(checkItemExists(name))) {
+            plugin.customItemMap.remove(name);
+            ItemStack item = new ItemStack(Material.AIR);
+            plugin.configManager.getCustomItemsCFG(). set(name, item);
+            plugin.configManager.saveCustomItems();
+            plugin.messageManager.playerWarnMessage(player, "Successfully removed " + name + ".");
         }
     }
 
     public void giveItem(Player player, Player targetPlayer, String name, int quantity){
-        if (checkItemExistsMap(name)) {
+        if (checkItemExists(name)) {
             ItemStack item = itemStackBuilder(name, quantity);
             targetPlayer.getInventory().addItem(item);
-            messageManager.playerGoodMessage(player, "Gave " + targetPlayer.getName() + " " + quantity + " " + item + ".");
-            messageManager.playerGoodMessage(targetPlayer, "You received " + quantity + " " + item + ".");
+            plugin.messageManager.playerGoodMessage(player, "Gave " + targetPlayer.getName() + " " + quantity + " " + item.getItemMeta().getDisplayName() + ".");
+            plugin.messageManager.playerGoodMessage(targetPlayer, "You received " + quantity + " " + item.getItemMeta().getDisplayName() + ".");
         }
     }
 
     public void dropItem(Block block, String name, int quantity){
-        if (checkItemExistsMap(name)) {
+        if (checkItemExists(name)) {
             ItemStack item = itemStackBuilder(name, quantity);
             block.getWorld().dropItemNaturally(block.getLocation(), item);
         }
     }
 
-    private Map<String, ItemStack> loadItemData() {
-        customItemData.clear();
-        for (String name :  configManager.getCustomItemsCFG().getConfigurationSection("Items").getKeys(false)){
-            customItemData.put(name, configManager.getCustomItemsCFG().getItemStack(name));
-        }
-        return customItemData;
-    }
-
-    private boolean checkItemExistsFile(String name) {
-        if (!(configManager.getCustomItemsCFG().getConfigurationSection("Items").contains(name))) {
+    public boolean checkItemExists (String name) {
+        if (plugin.customItemMap.containsKey(name)) {
+            return true;
+        } else {
             return false;
         }
-        return true;
-    }
-    private boolean checkItemExistsMap(String name) {
-        if (!(customItemData.containsKey(name))) {
-            return false;
-        }
-        return true;
     }
 
-    private ItemStack getItem(String name) {
-        if (!(checkItemExistsMap(name))) {
-            ItemStack item = new ItemStack(Material.AIR, 1);
-            return item;
-        } else {
-            ItemStack item = customItemData.get(name);
-            return item;
-        }
+    private void addItemToMap (Player player, String name) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        plugin.customItemMap.put(name, item);
+        plugin.messageManager.playerGoodMessage(player, "Successfully created " + name + ".");
     }
 
-    private void saveItemDataToFile(String name, ItemStack item) {
-        if (!(checkItemExistsFile(name))) {
-            configManager.getCustomItemsCFG().set(name, item);
-            configManager.saveCustomItems();
-        } else {
-            messageManager.consoleErrorMessage("This item already exists!");
-        }
-    }
-
-    private void removeItemDataFromFile(String name, ItemStack item) {
-        if (!(checkItemExistsFile(name))) {
-            configManager.getCustomItemsCFG().set("Items." + name, null);
-            configManager.saveCustomItems();
-        } else {
-            messageManager.consoleErrorMessage("This item already exists!");
-        }
-    }
-
-    private void saveItemDataToMap(String name, ItemStack item) {
-        if (!(checkItemExistsMap(name))) {
-            customItemData.put(name, item);
-        } else {
-            messageManager.consoleErrorMessage("This item already exists!");
-        }
-    }
-
-    private void removeItemDataFromMap(String name, ItemStack item) {
-        if (!(checkItemExistsMap(name))) {
-            customItemData.remove(name);
-        } else {
-            messageManager.consoleErrorMessage("This item already exists!");
-        }
+    private void saveItemDataToFile(Player player, String name) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        plugin.configManager.getCustomItemsCFG().set(name, item);
+        plugin.configManager.saveCustomItems();
     }
 
     private ItemStack itemStackBuilder(String name, int quantity) {
@@ -113,6 +72,9 @@ public class ItemManager {
         return item;
     }
 
-
+    private ItemStack getItem(String name) {
+        ItemStack item = plugin.customItemMap.get(name);
+        return item;
+    }
 
 }

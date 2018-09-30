@@ -1,27 +1,37 @@
 package me.beardedorc.orccraft;
 
-import me.beardedorc.orccraft.commands.utilities.CommandManager;
+import me.beardedorc.orccraft.commands.CommandManager;
 import me.beardedorc.orccraft.events.OreBreakEvent;
 import me.beardedorc.orccraft.utilities.ConfigManager;
 import me.beardedorc.orccraft.utilities.ItemManager;
 import me.beardedorc.orccraft.utilities.MessageManager;
 import me.beardedorc.orccraft.utilities.MysqlManager;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class OrcCraft extends JavaPlugin {
 
     private  static  OrcCraft instance;
+
     public CommandManager commandManager;
     private MysqlManager mysqlManager;
     public ConfigManager configManager;
-    public ItemManager itemManager;
-    public MessageManager messageManager;
+    public ItemManager itemManager = new ItemManager();
+    public MessageManager messageManager = new MessageManager();
+
+    public HashMap<String, ItemStack> customItemMap;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         setInstance(this);
         loadManagers();loadEventsManager();
+        this.customItemMap = new HashMap<>();
+        loadItemData();
 
 
     }
@@ -41,7 +51,8 @@ public final class OrcCraft extends JavaPlugin {
         commandManager.setup();
         mysqlManager = new MysqlManager();
         mysqlManager.mysqlSetup();
-        itemManager = new ItemManager();
+ //       itemManager = new ItemManager();
+ //       messageManager = new MessageManager();
 
     }
 
@@ -57,8 +68,19 @@ public final class OrcCraft extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OreBreakEvent(), this);
     }
 
+    private Map<String, ItemStack> loadItemData() {
+        customItemMap.clear();
+        for (String name :  configManager.getCustomItemsCFG().getConfigurationSection("").getKeys(false)){
+            ItemStack item = configManager.getCustomItemsCFG().getItemStack(name);
+              if (item.getType()!= Material.AIR)
+            customItemMap.put(name, item);
+        }
+        return customItemMap;
+    }
+
     @Override
     public void onDisable() {
+        this.customItemMap.clear();
         // Plugin shutdown logic
     }
 }

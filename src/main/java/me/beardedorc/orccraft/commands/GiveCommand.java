@@ -1,7 +1,6 @@
 package me.beardedorc.orccraft.commands;
 
 import me.beardedorc.orccraft.OrcCraft;
-import me.beardedorc.orccraft.commands.utilities.SubCommand;
 import me.beardedorc.orccraft.utilities.ItemManager;
 import me.beardedorc.orccraft.utilities.MessageManager;
 import me.beardedorc.orccraft.utilities.PlayerManager;
@@ -11,9 +10,10 @@ import org.bukkit.entity.Player;
 
 public class GiveCommand extends SubCommand {
     private OrcCraft plugin = OrcCraft.getInstance();
-    MessageManager messageManager;
-    ItemManager itemManager;
-    PlayerManager playerManager;
+    PlayerManager playerManager = new PlayerManager();
+
+    ItemManager itemManager = new ItemManager();
+    MessageManager messageManager = new MessageManager();
 
     @Override
     public void onCommand(Player player, String[] args) {
@@ -33,9 +33,13 @@ public class GiveCommand extends SubCommand {
 
         if (args.length == 3) {
             String itemName = args[2];
-            itemManager.giveItem(player, targetName, itemName, 1);
-            player.sendMessage("Gave " + player.getName() + " " + itemName + ".");
-            return;
+            if (itemManager.checkItemExists(itemName)) {
+                itemManager.giveItem(player, targetName, itemName, 1);
+                player.sendMessage("Gave " + targetName.getName() + " " + itemName + ".");
+            } else {
+                messageManager.playerWarnMessage(player, itemName + " is not a valid item name.");
+            }
+        //    return;
         }
 
         if (args.length == 4) {
@@ -46,7 +50,11 @@ public class GiveCommand extends SubCommand {
                 quantity = Integer.valueOf(args[2]);
             }
             String itemName = args[3];
-            itemManager.giveItem(player, targetName, itemName, quantity);
+            if (itemManager.checkItemExists(itemName)) {
+                itemManager.giveItem(player, targetName, itemName, quantity);
+            } else {
+                messageManager.playerWarnMessage(player, itemName + " is not a valid item name.");
+            }
         }
     }
 

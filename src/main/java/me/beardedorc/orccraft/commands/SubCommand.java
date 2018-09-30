@@ -1,4 +1,4 @@
-package me.beardedorc.orccraft.commands.utilities;
+package me.beardedorc.orccraft.commands;
 
 import org.bukkit.entity.Player;
 

@@ -1,7 +1,6 @@
 package me.beardedorc.orccraft.commands;
 
 import me.beardedorc.orccraft.OrcCraft;
-import me.beardedorc.orccraft.commands.utilities.SubCommand;
 import org.bukkit.entity.Player;
 
 public class InfoCommand extends SubCommand {
